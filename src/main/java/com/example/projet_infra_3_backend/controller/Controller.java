@@ -5,6 +5,10 @@ import com.example.projet_infra_3_backend.exception.*;
 import com.example.projet_infra_3_backend.modele.User;
 import com.example.projet_infra_3_backend.modele.UserPrincipal;
 import com.example.projet_infra_3_backend.service.UserService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
@@ -26,10 +30,12 @@ import java.util.List;
 
 import static com.example.projet_infra_3_backend.constant.FilesConstant.*;
 import static com.example.projet_infra_3_backend.constant.SecurityConstant.JWT_TOKEN_HEADER;
+import static com.example.projet_infra_3_backend.constant.SwaggerRoot.APP_ROOT;
 import static org.springframework.http.HttpStatus.*;
 import static org.springframework.http.MediaType.IMAGE_JPEG_VALUE;
 
 @RestController
+@Api("/user")
 @RequestMapping(value="/user")
 public class Controller {
     private UserService userService;
@@ -45,6 +51,12 @@ public class Controller {
         this.jwtTokenProvider = jwtTokenProvider;
     }
 
+    @ApiOperation(value = "login a existant user", response = User.class)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = ""),
+            @ApiResponse(code = 423, message = "Suite à 5 tentatives incorrect, votre compte à été bloqué"),
+            @ApiResponse(code = 400, message = "Pseudo ou mot de passe Incorrect, veuillez ressayez.")
+    })
     @PostMapping("/login")
     public ResponseEntity<User> login(@RequestBody User user)  {
         try {
@@ -62,6 +74,13 @@ public class Controller {
         }
     }
 
+    @ApiOperation(value = "register a new user", response = User.class)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = ""),
+            @ApiResponse(code = 404, message = "Utilisateur non trouvé"),
+            @ApiResponse(code = 409, message = "L'email existe déjà"),
+            @ApiResponse(code = 409, message = "Le pseudo existe déjà")
+    })
     @PostMapping("/register")
     public ResponseEntity<User> register(@RequestBody User user)  {
         try {
@@ -76,6 +95,7 @@ public class Controller {
         }
     }
 
+    @ApiOperation(value = "register a new user without a generated password")
     @PostMapping("/register/no-generated-password")
     public ResponseEntity<User> registerNoGeneratedPassword(@RequestBody User user)  {
         try {
@@ -91,6 +111,7 @@ public class Controller {
 
     }
 
+    @ApiOperation(value = "add a user")
     @PostMapping("/add")
     public ResponseEntity<User> addNewUser(@RequestParam ("firstName") String firstName,
                                            @RequestParam ("lastName") String lastName,
@@ -116,6 +137,7 @@ public class Controller {
 
     }
 
+    @ApiOperation(value = "update a user")
     @PostMapping("/update")
     public ResponseEntity<User> updateUser(@RequestParam ("currentUsername") String currentUsername,
                                            @RequestParam ("firstName") String firstName,
@@ -142,11 +164,13 @@ public class Controller {
 
     }
 
+    @ApiOperation(value = "add a new image profil in user")
     @GetMapping(path = "/image/{username}/{fileName}", produces = IMAGE_JPEG_VALUE)
     public byte[] getProfileImage(@PathVariable("username") String username, @PathVariable("fileName") String fileName) throws IOException {
         return Files.readAllBytes(Paths.get(USER_FOLDER + username + FORWARD_SLASH + fileName));
     }
 
+    @ApiOperation(value = "get a temporary image profil")
     @GetMapping(path = "/image/profile/{username}", produces = IMAGE_JPEG_VALUE)
     public byte[] getTempProfileImage(@PathVariable("username") String username) throws IOException {
         URL url = new URL(TEMP_PROFILE_IMAGE_BASE_URL + username);
@@ -162,12 +186,14 @@ public class Controller {
         return byteArrayOutputStream.toByteArray();
     }
 
+    @ApiOperation(value = "list of all users")
     @GetMapping("/list")
     public ResponseEntity<List<User>> getAllUsers(){
         List<User> users = userService.getUsers();
         return new ResponseEntity<>(users,OK);
     }
 
+    @ApiOperation(value = "reinitialisation of password")
     @GetMapping("/resetpassword/{email}")
     public ResponseEntity<?> resetPassword(@PathVariable("email") String email){
         try {
@@ -177,6 +203,8 @@ public class Controller {
             throw new  ResponseStatusException(NOT_FOUND, email + " : cette email n'a pas été retrouvé");
         }
     }
+
+    @ApiOperation(value = "deleted a existant user")
     @DeleteMapping("/delete/{username}")
 //    @PreAuthorize("hasAnyAuthority('user:delete')")
     public ResponseEntity<?> deleteUser(@PathVariable("username") String username){
