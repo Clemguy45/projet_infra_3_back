@@ -1,0 +1,19 @@
+version: '3.7'
+services:
+  mongodb:
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+  projet:
+    build: .
+    ports:
+      - "8080:8080"
+    environment:
+      - spring.data.mongodb.uri=mongodb+srv://projetinfra3user:projetinfra3password@projetinfra3.pslp1fj.mongodb.net/?retryWrites=true&w=majority
+      - spring.data.mongodb.host=mongodb
+      - spring.data.mongodb.database=projetinfra3
+      - spring.data.mongodb.username=projetinfra3user
+      - spring.data.mongodb.password=projetinfra3password
+      - spring.data.mongodb.auto-index-creation=true
+    depends_on:
+      - mongodb
