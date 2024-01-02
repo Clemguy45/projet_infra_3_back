@@ -11,6 +11,12 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+
+      - name: Setup Docker
+        uses: docker/setup-docker@v2
+        with:
+          docker-version: '20.10.9'
+
       - name: Checkout Repository
         uses: actions/checkout@v2
 
