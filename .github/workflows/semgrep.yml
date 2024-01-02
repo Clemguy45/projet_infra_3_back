@@ -16,7 +16,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Setup Docker
-        uses: docker/cli@latest
+        uses: docker://docker
 
       - name: Run Semgrep Analysis
         run: |
