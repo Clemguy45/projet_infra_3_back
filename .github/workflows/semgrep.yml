@@ -6,14 +6,14 @@ on:
     branches:
       - semgrep  # Modifier si votre branche principale a un nom différent
 
-  jobs:
-    semgrep-analysis:
-      runs-on: ubuntu-latest
+jobs:
+  semgrep-analysis:
+    runs-on: ubuntu-latest
 
-      steps:
-        - name: Checkout Repository
-          uses: actions/checkout@v2
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
 
-        - name: Run Semgrep Analysis
-          run: |
-            docker run --rm -v $(pwd):/src returntocorp/semgrep -c /src/semgrep.yml /src
+      - name: Run Semgrep Analysis
+        run: |
+          docker run --rm -v $(pwd):/src returntocorp/semgrep -c /src/semgrep.yml /src
