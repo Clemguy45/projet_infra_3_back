@@ -23,4 +23,5 @@ jobs:
 
       - name: Run Semgrep Analysis
         run: |
+          docker pull returntocorp/semgrep
           docker run --rm -v $(pwd):/src returntocorp/semgrep -c /src/semgrep.yml /src
