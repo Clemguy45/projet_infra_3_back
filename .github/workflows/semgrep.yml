@@ -12,11 +12,11 @@ jobs:
 
     steps:
 
-      - name: Setup Docker
-        uses: docker/setup-docker@v2
-
       - name: Checkout Repository
         uses: actions/checkout@v2
+
+      - name: Setup Docker
+        uses: docker://dind
 
       - name: Run Semgrep Analysis
         run: |
