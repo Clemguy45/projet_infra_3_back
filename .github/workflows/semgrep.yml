@@ -1,0 +1,19 @@
+
+
+name: Semgrep Analysis
+on:
+  push:
+    branches:
+      - semgrep  # Modifier si votre branche principale a un nom différent
+
+  jobs:
+    semgrep-analysis:
+      runs-on: ubuntu-latest
+
+      steps:
+        - name: Checkout Repository
+          uses: actions/checkout@v2
+
+        - name: Run Semgrep Analysis
+          run: |
+            docker run --rm -v $(pwd):/src returntocorp/semgrep -c /src/semgrep.yml /src
