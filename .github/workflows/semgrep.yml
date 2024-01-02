@@ -1,40 +1,49 @@
-name: Semgrep Analysis
+# This workflow uses actions that are not certified by GitHub.
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support
+# documentation.
+
+# This workflow file requires a free account on Semgrep.dev to
+# manage rules, file ignores, notifications, and more.
+#
+# See https://semgrep.dev/docs
+
+name: Semgrep
+
 on:
   push:
-    branches:
-      - semgrep
+    branches: [ "semgrep" ]
+  pull_request:
+    # The branches below must be a subset of the branches above
+    branches: [ "semgrep" ]
+  schedule:
+    - cron: '42 2 * * 3'
+
+permissions:
+  contents: read
 
 jobs:
-
-  semgrep-full:
+  semgrep:
+    permissions:
+      contents: read # for actions/checkout to fetch code
+      security-events: write # for github/codeql-action/upload-sarif to upload SARIF results
+      actions: read # only required for a private repository by github/codeql-action/upload-sarif to get the Action run status
+    name: Scan
     runs-on: ubuntu-latest
-    container:
-      image: returntocorp/semgrep
-
     steps:
+      # Checkout project source
+      - uses: actions/checkout@v3
 
-      # step 1
-      - name: clone application source code
-        uses: actions/checkout@v3
-
-      # step 2
-      - name: full scan
-        run: |
-          semgrep \
-            --sarif --output report.sarif \
-            --metrics=off \
-            --config="p/default"
-
-      # step 3
-      - name: save report as pipeline artifact
-        uses: actions/upload-artifact@v3
+      # Scan code using project's configuration on https://semgrep.dev/manage
+      - uses: returntocorp/semgrep-action@fcd5ab7459e8d91cb1777481980d1b18b4fc6735
         with:
-          name: report.sarif
-          path: report.sarif
+          publishToken: ${{ secrets.SEMGREP_APP_TOKEN }}
+          publishDeployment: ${{ secrets.SEMGREP_DEPLOYMENT_ID }}
+          generateSarif: "1"
 
-      # step 4
-      - name: publish code scanning alerts
+      # Upload SARIF file generated in previous step
+      - name: Upload SARIF file
         uses: github/codeql-action/upload-sarif@v2
         with:
-          sarif_file: report.sarif
-          category: semgrep
+          sarif_file: semgrep.sarif
+        if: always()
