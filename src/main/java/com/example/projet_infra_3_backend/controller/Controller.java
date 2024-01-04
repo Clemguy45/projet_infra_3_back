@@ -5,10 +5,6 @@ import com.example.projet_infra_3_backend.exception.*;
 import com.example.projet_infra_3_backend.modele.User;
 import com.example.projet_infra_3_backend.modele.UserPrincipal;
 import com.example.projet_infra_3_backend.service.UserService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
@@ -47,6 +43,13 @@ public class Controller {
         this.userService =userService;
         this.authenticationManager = authenticationManagerz;
         this.jwtTokenProvider = jwtTokenProvider;
+    }
+
+    @GetMapping("/{username}/profile")
+    public ResponseEntity<User> getProfile(@PathVariable("username") String username) throws UserNotFoundException {
+        // Utilisez le service approprié pour récupérer les détails de l'utilisateur
+        User user = userService.findUserByUsername(username);
+        return ResponseEntity.ok(user);
     }
 
     @PostMapping("/login")
