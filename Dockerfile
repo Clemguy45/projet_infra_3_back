@@ -1,5 +1,7 @@
-# Utilisez l'image de base adoptopenjdk avec la version 17
-FROM agliullin92/openjdk.17.dnd-alpine
+# initialize build and set base image for first stage
+FROM maven:3.6.3-openjdk-17 as stage1
+# speed up Maven JVM a bit
+ENV MAVEN_OPTS="-XX:+TieredCompilation -XX:TieredStopAtLevel=1"
 
 # Définissez le répertoire de travail dans le conteneur
 WORKDIR /app
@@ -7,21 +9,14 @@ WORKDIR /app
 # Copiez le fichier pom.xml dans le conteneur à /app
 COPY pom.xml .
 
-# Copiez le wrapper Maven dans le conteneur
-COPY mvnw .
-COPY .mvn .mvn
-
-# Donnez les permissions d'exécution au wrapper Maven
-RUN chmod +x mvnw
-
 # Téléchargez les dépendances Maven (ceci permet de mettre en cache les dépendances si le pom.xml n'a pas changé)
-RUN ./mvnw dependency:go-offline
+RUN mvn dependency:go-offline
 
 # Copiez le reste des fichiers dans le conteneur
 COPY src ./src
 
 # Compilez l'application avec Maven
-RUN ./mvnw package -DskipTests
+RUN mvn clean install -Dmaven.test.skip=true
 
 # Exposez le port 8080 (ou tout autre port utilisé par votre application)
 EXPOSE 8080
