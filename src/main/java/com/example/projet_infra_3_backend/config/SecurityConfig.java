@@ -43,6 +43,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .csrf().disable().cors().and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and().authorizeRequests().antMatchers(SecurityConstant.PUBLIC_URLS).permitAll()
+                .and().authorizeRequests().antMatchers("https://projet-infra-3-backend-dev.azurewebsites.net/").authenticated()
                 .anyRequest().authenticated()
                 .and()
                 .addFilterBefore(jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class);
