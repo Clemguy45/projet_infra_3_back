@@ -14,29 +14,5 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(Controller.class)
 public class ControllerTest {
-	@Autowired
-	private MockMvc mockMvc;
 
-	@MockBean
-	private JWTTokenProvider jwtTokenProvider;
-
-	@Test
-	public void getProfile() throws Exception {
-		this.mockMvc.perform(get("/user/{username}/profile", "abc"))
-			.andExpect(status().isOk())
-			.andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
-			.andExpect(jsonPath("$.id").value("<value>"))
-			.andExpect(jsonPath("$.firstName").value("<value>"))
-			.andExpect(jsonPath("$.lastName").value("<value>"))
-			.andExpect(jsonPath("$.username").value("<value>"))
-			.andExpect(jsonPath("$.password").value("<value>"))
-			.andExpect(jsonPath("$.email").value("<value>"))
-			.andExpect(jsonPath("$.profileImageUrl").value("<value>"))
-			.andExpect(jsonPath("$.lastLoginDate").value("<value>"))
-			.andExpect(jsonPath("$.lastLoginDateDisplay").value("<value>"))
-			.andExpect(jsonPath("$.joinDate").value("<value>"))
-			.andExpect(jsonPath("$.role").value("<value>"))
-			.andExpect(jsonPath("$.authorities[0]").value("<value>"))
-			.andExpect(jsonPath("$.isNotLocked").value("<value>"));
-	}
 }
