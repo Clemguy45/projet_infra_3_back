@@ -45,6 +45,12 @@ public class Controller {
         this.jwtTokenProvider = jwtTokenProvider;
     }
 
+    @GetMapping("/")
+    public ResponseEntity<List<User>> getAllUsers(@PathVariable("username") String username) throws UserNotFoundException {
+        // Utilisez le service approprié pour récupérer les détails de l'utilisateur
+        List<User> user = userService.getUsers();
+        return ResponseEntity.ok(user);
+    }
     @GetMapping("/{username}/profile")
     public ResponseEntity<User> getProfile(@PathVariable("username") String username) throws UserNotFoundException {
         // Utilisez le service approprié pour récupérer les détails de l'utilisateur
