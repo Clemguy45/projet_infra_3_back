@@ -24,9 +24,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @SpringBootTest
-@TestPropertySource(properties = {
-        "spring.data.mongodb.uri = mongodb+srv://projetinfra3user:projetinfra3password@projetinfra3.pslp1fj.mongodb.net/?retryWrites=true&w=majority"
-})
 class ProjetInfra3BackendApplicationTests {
-
+    @Test
+    void contextLoads() {
+    }
 }
