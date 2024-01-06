@@ -70,7 +70,6 @@ public class UserServiceImpl implements UserDetailsService,UserService{
         user.setProfileImageUrl(getTemporaryProfileImageUrl(username));
         userRepository.save(user);
         emailService.sendEmail(username, password, email);
-
         return user;
     }
 
@@ -96,9 +95,7 @@ public class UserServiceImpl implements UserDetailsService,UserService{
         user.setNotLocked(true);
         user.setRole(ROLE_USER.name());
         user.setAuthorities(ROLE_USER.getAuthorities());
-        user.setProfileImageUrl(getTemporaryProfileImageUrl(username));
         userRepository.save(user);
-
         return user;
     }
 
