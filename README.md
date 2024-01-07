@@ -1,4 +1,4 @@
-# Projet Infra 3 Back-end
+# Projet Infra 3 Back-end V.1.0.0
 
 *Ce projet a été généré par [Spring Initializr](https://start.spring.io/) version 2.7.17-SNAPSHOT.*
 
