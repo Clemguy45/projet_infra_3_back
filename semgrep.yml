@@ -1,0 +1,6 @@
+rules:
+  - id: java-insecure-deserialization
+    patterns:
+      - pattern: |
+          (ObjectInputStream || XMLDecoder).readObject()
+    message: "Insecure deserialization method"
