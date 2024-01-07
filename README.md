@@ -48,6 +48,10 @@ L'application est hébergée sur Azure et maintenue à jour grâce à la pipelin
 
 Vous pouvez retrouver l'entièreté du projet [en cliquant ici](https://portal.azure.com/#@univ-orleans.fr/resource/subscriptions/fd0e5100-031c-4d74-9e95-41224c6d1b5d/resourceGroups/projet-infra-3/overview)
 
+## Diagrammes
+
+Le diagramme est disponible dans le **back-end** à la racine de ce projet.
+
 ## Auteurs
 
 * GUYOT Clément
